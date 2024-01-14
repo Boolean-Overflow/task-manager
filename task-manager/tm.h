@@ -3,7 +3,6 @@ typedef struct Task Task;
 typedef struct Node List;
 typedef struct Queue Queue;
 typedef struct Stack Stack;
-
 Task create_task();
 
 TM* tm_init();
