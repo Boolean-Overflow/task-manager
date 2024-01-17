@@ -1,9 +1,12 @@
 typedef struct TaskManager TM;
 typedef struct Task Task;
-typedef struct Node List;
 typedef struct Queue Queue;
 typedef struct Stack Stack;
+
+
 Task create_task();
+Task* create_task();
+void print_task(Task task);
 
 TM* tm_init();
 TM* tm_insert(TM* tm, Task task);
@@ -11,7 +14,6 @@ TM* tm_remove(TM* tm, char* id);
 
 // Matateu
 Queue* queue_init();
-List* create_node(Task task);
 void queue_print(Queue* queue);
 Queue* queue_copy(Queue* source);
 Queue* enqueue(Queue* queue, Task task);
