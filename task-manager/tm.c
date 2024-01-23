@@ -5,6 +5,26 @@
 #include<stack.c>
 #include<queue.c>
 
+
+typedef struct Task{
+  char* name, * id, * description;
+  int state;
+}Task;
+
+typedef struct no {
+   struct no* next;
+   Task task;
+}List;
+
+typedef struct Queue {
+  List* first, *last;
+  struct Queue* next;
+}Queue;
+
+typedef struct Stack{
+  Queue* top;
+}Stack;
+
 struct Tasks {
   char name[150], id[25], description[255], * datetime;
   int state, priority;
@@ -12,7 +32,8 @@ struct Tasks {
 };
 
 struct Queue{
-  T 
+  Task* first, *last;
+  struct Queue* next;
 }
 
 char* get_datetime() {
