@@ -1,8 +1,13 @@
 {
   "files.associations": {
-    "time.h": "c",
-    "stdio.h": "c",
+    "tm.h": "c",
+    "stack.h": "c",
     "stdlib.h": "c",
-    "tm.h": "c"
+    "string.h": "c",
+    "stdio.h": "c",
+    "user.h": "c",
+    "list.h": "c",
+    "queue.h": "c",
+    "task.h": "c"
   }
 }
