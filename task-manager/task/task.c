@@ -38,7 +38,7 @@ void print_task(Task* task) {
     puts("Tarefa inexistente!");
     return;
   }
-
+  puts("====================");
   puts(task->id);
   puts(task->name);
   if (strlen(task->description) > 0) puts(task->description);
@@ -46,6 +46,7 @@ void print_task(Task* task) {
   printf("Data de criação: %s\n", task->createdAt);
   printf("Data de expiração: %s\n", task->expiresAt);
   printf("Última actualização: %s\n", task->updatedAt);
+  puts("====================");
 };
 
 int task_cmp(Task* task, char* str) {

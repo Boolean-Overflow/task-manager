@@ -4,107 +4,132 @@
 #include "queue.h"
 
 Queue* queue_init() {
-  Queue* Q = (Queue*)malloc(sizeof(Queue));
-
-  if (!Q) {
-    printf("Erro de alocacao de memória\n");
+  Queue* queue = (Queue*)malloc(sizeof(Queue));
+  if (!queue) {
+    perror("Erro de alocacao de memória");
     exit(1);
   }
-  Q->front = NULL;
-  Q->end = NULL;
-  return Q;
+  queue->head = NULL;
+  queue->tail = NULL;
+  return queue;
 }
-QueueTask* create_node(char name[], char description[], int last_id, int priority) {
-  QueueTask* node = (QueueTask*)malloc(sizeof(QueueTask));
-  if (last_id) {
-    node->id[0] = 'T';
-    strcat(node->id, "000");
+
+int is_queue_empty(Queue* queue) {
+  return queue->head == NULL;
+}
+
+int queue_print(Queue* queue) {
+  if (!queue) {
+    puts("Fila nao criada");
+    return -1;
   }
-  if (!node) {
-    printf("Erro de alocação de memória\n");
-    exit(1);
+
+  if (is_queue_empty(queue)) {
+    puts("Fila vazia!");
+    return 0;
   }
 
-  strcpy(node->name, name);
-  strcpy(node->description, description);
-  node->priority = priority;
-  node->next = NULL;
-  node->prev = NULL;
-  return node;
+  int count = 0;
+  List* tmp = queue->head;
+  while (tmp) {
+    print_task((Task*)(tmp->data));
+    fflush(stdin);
+    tmp = tmp->next;
+    count++;
+  }
+
+  return count;
 }
-int IsEmptyQueue(Queue* Q) {
-  if (!Q->front)
-    printf("Fila vazia\n");
-  return Q->front == NULL;
+
+Queue* enqueue(Queue* queue, Task* task) {
+  if (!queue) {
+    printf("Fila nao criada\n");
+    return NULL;
+  }
+
+  List* node = list_create_node(task, task->id);
+
+  if (!queue->head) {
+    queue->head = node;
+    queue->tail = node;
+
+    return queue;
+  }
+
+  List* current = queue->head;
+  while (((Task*)(current->data))->priority >= task->priority && current->next)
+    current = current->next;
+  if (current == queue->head) {
+    queue->head->prev = node;
+    current->next = queue->head;
+    current->prev = NULL;
+    queue->head = node;
+  }
+  else if (current != queue->tail) {
+    node->prev = current->prev;
+    node->next = current;
+    current->prev->next = node;
+    current->prev = node;
+  }
+  else {
+    node->prev = current;
+    current->next = node;
+    queue->tail = node;
+  }
+  return queue;
 }
-// void queue_print(Queue* queue) {
-//   if (!queue) {
-//     printf("Fila nao criada\n");
-//     exit(1);
-//   }
-//   if (!IsEmptyQueue(queue)) {
-//     Task* current = queue->front;
 
-//     printf("<=============================FILA==================================>:\n");
-//     //print_task(task);
-//     printf("\n====================================================================\n");
-//   }
-//   exit(1);
-// };
+Task* dequeue(Queue** queue) {
+  if (is_queue_empty(*queue)) {
+    puts("Fila Vazia");
+    return NULL;
+  }
 
-// Queue* queue_copy(Queue* source) {
-//   if (!source) {
-//     printf("fila nao criada\n");
-//     return NULL;
-//   }
-//   return source;
-// };
-// Queue* Enqueue(Queue* queue, Task* task) {
+  List* temp = (*queue)->head;
+  Task* task = temp->data;
 
-//   if (!queue) {
-//     printf("fila nao criada\n");
-//     return NULL;
-//   }
-//   Task* task = create_node(task);
-//   if (!task) return queue;
+  (*queue)->head = temp->next;
 
-//   if (IsEmptyQueue(queue)) {
-//     queue->front = task;
-//     queue->end = task;
-//     return queue->front;
-//   }
-//   Task* current = queue->front;
-//   while (current->priority >= task->priority && current->next)
-//     current = current->next;
-//   if (current == queue->front) {
-//     queue->front->prev = task;
-//     task->next = queue->front;
-//     task->prev = NULL;
-//     queue->front = task;
-//   }
-//   else if (current != queue->end) {
-//     task->prev = current->prev;
-//     task->next = current;
-//     current->prev->next = task;
-//     current->prev = task;
-//   }
-//   else {
-//     task->prev = current;
-//     current->next = task;
-//     queue->end = task;
-//   }
-//   return queue;
-// }
+  if (!(*queue)->head)
+    (*queue)->tail = NULL;
 
-// Task* dequeue(Queue** queue) {
-//   if (IsEmptyQueue(*queue))
-//     exit(1);
+  free(temp);
 
-//   List* temp = (*queue)->front;
-//   Task* task = temp->task;
-//   (*queue)->front = temp->next;
-//   if (!(*queue)->front)
-//     (*queue)->end = NULL;
-//   free(temp);
-//   return task;
-// };
+  return task;
+}
+
+Queue* queuecpy(Queue* src) {
+  if (!src) {
+    return src;
+  }
+
+  Queue* dest = queue_init();
+  List* tmp = src->head;
+  while (tmp) {
+    dest = enqueue(dest, tmp->data);
+    tmp = tmp->next;
+  }
+
+  return dest;
+}
+
+void queue_clear(Queue** queue) {
+  if (!(*queue)) return;
+
+  list_clear(&((*queue)->head));
+  (*queue)->tail = NULL;
+  free(queue);
+
+  *queue = NULL;
+}
+
+int queuecmp(Queue* queue1, Queue* queue2) {
+  List* t1 = queue1->head, * t2 = queue2->head;
+  while (t1 && t2) {
+    if (strcmp(t1->id, t2->id)) return 0;
+    t1 = t1->next;
+    t2 = t2->next;
+  }
+
+  return t1 == t2;
+}

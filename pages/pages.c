@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include "pages.h"
 
-User* login_page(List** users, int lastId) {
+User* login_page(List** users) {
   int option, valid = 1;
   User* user = NULL;
 
@@ -36,8 +36,8 @@ sign:
     }
     break;
   case 2:
-  {
-    int success = signup(users, "");
+  { 
+    int success = signup(users);
     if (success) puts("Usuario criado com sucesso!");
     else perror("Erro na criação do user");
     pause("");

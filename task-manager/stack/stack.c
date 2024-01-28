@@ -35,7 +35,10 @@ Queue* stack_pop(Stack** stack) {
   return queue;
 }
 
-// Queue* stack_peek(Stack* stack) {
-//   Queue* copy = queue_copy(stack->top);
-//   return copy;
-// }
+Queue* stack_peek(Stack* stack) {
+  if (!stack || !stack->top) {
+    return NULL;
+  }
+
+  return stack->top;
+}
