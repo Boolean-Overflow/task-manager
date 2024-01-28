@@ -2,6 +2,7 @@
 #include<locale.h>
 #include "task-manager/tm.h"
 #include "utils/utils.h"
+#include "pages/pages.h"
 
 int main() {
   TaskManager* instance = tm_init();
