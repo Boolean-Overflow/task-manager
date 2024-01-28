@@ -1,10 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c99 -I.
-SRC_DIR = task-manager
-UTILS_DIR = utils
-OUTPUT_DIR = output
 
-SRCS = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c) $(wildcard $(UTILS_DIR)/*.c) main.c
+OUTPUT_DIR = dist
+SRCS = $(wildcard ./*.c) $(wildcard ./**/*.c) $(wildcard ./**/**/*.c)
 OBJS = $(OUTPUT_DIR)/libs.o
 
 TARGET = $(OUTPUT_DIR)/task-manager-app

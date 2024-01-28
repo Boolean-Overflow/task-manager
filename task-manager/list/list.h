@@ -2,12 +2,13 @@
 #define __LIST__
 
 typedef struct Node {
+  char id[10];
   void* data;
   struct Node* next;
 } List;
 
-List* insert(List* head, void* data);
-
-void list_test();
+List* list_init();
+List* list_insert(List* head, void* data, char id[]);
+List* list_remove(List* head, char id[]);
 
 #endif
