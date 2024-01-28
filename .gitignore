@@ -3,3 +3,4 @@ output
 .vscode
 .exe
 build
+*.txt
