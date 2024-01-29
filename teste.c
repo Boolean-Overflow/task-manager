@@ -2,7 +2,7 @@
 #include <string.h>
 
 int main() {
-    char str[] = "Hello,,5,World! This is a sample string.";
+    char str[] = "Hello ,World! This is a sample string.";
     const char delim[] = " ,.!"; // Delimitadores: espaço, vírgula e ponto de exclamação
 
     // Primeira chamada

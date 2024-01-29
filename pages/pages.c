@@ -5,7 +5,7 @@
 User* login_page(List** users, int lastId) {
   int option, valid = 1;
   User* user = NULL;
-
+  lastId = 0;
   if (!connect_users(users)) puts("Erro de conexão com o banco!");
 
 sign:

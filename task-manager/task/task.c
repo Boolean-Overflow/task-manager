@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "task.h"
 
 Task* create_task(Task data) {
@@ -9,7 +9,6 @@ Task* create_task(Task data) {
     perror("Erro de Alocação");
     exit(1);
   }
-
   task->priority = data.priority;
   task->state = data.state;
   task->responsable = data.responsable;

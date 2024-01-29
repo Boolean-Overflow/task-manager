@@ -35,6 +35,10 @@ Queue* stack_pop(Stack** stack) {
   return queue;
 }
 
+void stack_clear(Stack* stack){
+  queue_clear(stack->top);
+  free(stack);
+}
 // Queue* stack_peek(Stack* stack) {
 //   Queue* copy = queue_copy(stack->top);
 //   return copy;
