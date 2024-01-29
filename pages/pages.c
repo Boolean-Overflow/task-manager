@@ -61,7 +61,6 @@ Task Add_Task(List* users) {
   printf("Sim[1]\\Não[0]:");while(!scanf("%d",&option));
   if(option){
     scanf("Username: "); scanf("%s",responsable);
-    
   }
 }
 
