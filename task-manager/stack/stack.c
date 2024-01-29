@@ -29,16 +29,38 @@ Stack* stack_push(Stack* stack, Queue* queue) {
 }
 
 Queue* stack_pop(Stack** stack) {
+  if (!(*stack)) {
+    puts("Pilha Inexistente\n");
+    return NULL;
+  }
+
+  if (!((*stack)->top)) {
+    puts("Pilha vazia");
+    return NULL;
+  }
+
   Queue* queue = (*stack)->top;
   (*stack)->top = (*stack)->top->next;
+
   queue->next = NULL;
+
   return queue;
 }
 
 Queue* stack_peek(Stack* stack) {
   if (!stack || !stack->top) {
+    puts("Pilha Vazia");
     return NULL;
   }
-
   return stack->top;
+}
+
+void stack_clear(Stack** stack){
+  Queue* queue;
+  while((*stack)->top){
+    queue = (*stack)->top;
+    (*stack)->top = (*stack)->top->next;
+    queue_clear(&queue);
+  }
+  free(*stack);
 }

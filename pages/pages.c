@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include "pages.h"
 
-User* login_page(List** users) {
+User* login_page(List** users, int lastId) {
   int option, valid = 1;
   User* user = NULL;
 
@@ -36,8 +36,8 @@ sign:
     }
     break;
   case 2:
-  { 
-    int success = signup(users);
+  {
+    int success = signup(users, lastId);
     if (success) puts("Usuario criado com sucesso!");
     else perror("Erro na criação do user");
     pause("");
@@ -47,4 +47,52 @@ sign:
   default:
     return NULL;
   }
+}
+
+Task Add_Task(List* users) {
+  Task task;
+  char responsable[30];
+  User* user = malloc(sizeof(User));
+  printf("Digite o nome da tarefa: "); scanf("%s", task.name);
+  printf("Digite a descrição da tarefa: "); scanf("%s", task.description);
+  printf("Digite o grau de prioridade: "); scanf("%d", &task.priority);
+  puts("Deseja indicar um responsável para a tarefa ?");
+  int option = 0; 
+  printf("Sim[1]\\Não[0]:");while(!scanf("%d",&option));
+  if(option){
+    scanf("Username: "); scanf("%s",)
+  }
+}
+
+void dashboard(TaskManager* instance, User* user) {
+  puts("========= TASK MANAGER ===========");
+
+  puts("1- Gerenciar Tarefas");
+  puts("2- Perfil");
+  puts("3- Gerenciar utilizadores");
+  puts("4- Sair");
+
+  // Gerenfiar Tarefas
+  puts("1- Adicionar Tarefa");
+  puts("2- Editar Tarefa");
+  puts("3- Eliminar tarefa"); // KM
+  puts("4- Listar Tarefas"); // KM
+  puts("5- Procurar Tarefa"); // KM
+  puts("6- Duplicar Tarefa");
+  puts("7- Marcar tarefa como concluida");
+  // puts("8- Desfazer ultima acção(undo)");
+  // puts("9- Refazer ultima acção(redo)");
+  puts("10- Voltar");
+
+  // Perfil
+  printf("Olá, %s\n", user->name);
+  puts("1- Visualizar informações");
+  puts("2- Editar Informações");
+  puts("3- Voltar");
+
+  // Gerenciar utilizadores
+  puts("1- Listar Utilizadores");
+  puts("2- Eliminar Utilizadores");
+  puts("3- Voltar");
+
 }

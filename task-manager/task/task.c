@@ -17,20 +17,14 @@ Task* create_task(Task data) {
   strcpy(task->name, data.name);
   strcpy(task->description, data.description);
   strcpy(task->createdAt, __TIMESTAMP__);
-  strcpy(task->updatedAt, data.createdAt);
   strcpy(task->expiresAt, data.expiresAt);
 
   return task;
 }
 
-Task* update_task(Task* task) {
-  if (!task) {
-    puts("Tarefa inexistente!");
-    return task;
-  }
-  strcpy(task->updatedAt, __TIMESTAMP__);
-
-  return task;
+Task* taskcpy(Task* src) {
+  if (!src) return NULL;
+  return create_task(*src);
 }
 
 void print_task(Task* task) {
@@ -41,19 +35,26 @@ void print_task(Task* task) {
   puts("====================");
   puts(task->id);
   puts(task->name);
+  printf("Prioridade: %d\n", task->priority);
   if (strlen(task->description) > 0) puts(task->description);
   if (task->responsable) printf("Responsável: %s\n", task->responsable->username);
   printf("Data de criação: %s\n", task->createdAt);
   printf("Data de expiração: %s\n", task->expiresAt);
-  printf("Última actualização: %s\n", task->updatedAt);
-  puts("====================");
+  fflush(stdin);
 };
 
-int task_cmp(Task* task, char* str) {
-  if (!task) {
-    puts("Task Inexistente");
-    return 0;
+List* find_matched_tasks(List* tasks, char* str) {
+  if (!tasks) return NULL;
+  List* head = list_init();
+  while (tasks) {
+    Task* task = tasks->data;
+    if (strstr(task->name, str) || strstr(task->description, str)) {
+      head = list_insert(head, taskcpy(task), task->id);
+      puts(task->id);
+    }
+    tasks = tasks->next;
   }
 
-  return !strcmp(task->name, str) || !strcmp(task->description, str);
+  return head;
 }
+

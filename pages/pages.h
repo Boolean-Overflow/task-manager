@@ -3,6 +3,6 @@
 #include "../task-manager/tm.h"
 #include "../utils/utils.h"
 
-User* login_page(List** users);
+User* login_page(List** users, int lastId);
 
 #endif

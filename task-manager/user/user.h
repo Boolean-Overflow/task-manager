@@ -27,6 +27,6 @@ int add_user(List** users, User user);
 int connect_users(List** users);
 
 User* login(List* users);
-int signup(List** users);
+int signup(List** users, int lastId);
 
 #endif

@@ -31,12 +31,11 @@ TaskManager* tm_add_task(TaskManager* instance, Task task) {
   snprintf(task.id, 10, "TASK-0%d", instance->lastId[TASK_LAST_ID_INDEX]++);
 
   Task* createdTask = create_task(task);
-  instance->tasks = enqueue(instance->tasks, createdTask);
-  
-  printf("%s", instance->tasks->tail->id);
 
   if (!stack_empty(instance->redo))
     instance->undo = stack_push(instance->undo, queuecpy(instance->tasks));
+
+  instance->tasks = enqueue(instance->tasks, createdTask);
 
   instance->redo = stack_push(instance->redo, queuecpy(instance->tasks));
 
@@ -51,7 +50,7 @@ TaskManager* tm_undo(TaskManager* instance) {
 
   Queue* q = stack_pop(&(instance->undo));
   instance->redo = stack_push(instance->redo, queuecpy(instance->tasks));
-  queue_clear(&(instance->tasks));
+  queue_clear(&instance->tasks);
   instance->tasks = q;
 
   return instance;

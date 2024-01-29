@@ -148,7 +148,7 @@ User* login(List* users) {
   return NULL;
 }
 
-int signup(List** users) {
+int signup(List** users, int lastId) {
   clearConsole();
   fflush(stdin);
   User user;
@@ -205,7 +205,9 @@ int signup(List** users) {
   scanf("%c", &user.gender);
   fflush(stdin);
 
-  strcpy(user.id, "");
+  char id[10];
+  snprintf(id, 10, "USER-0%d", lastId);
+  strcpy(user.id, id);
 
   return add_user(users, user);
 }

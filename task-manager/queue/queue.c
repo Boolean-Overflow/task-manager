@@ -32,6 +32,7 @@ int queue_print(Queue* queue) {
   int count = 0;
   List* tmp = queue->head;
   while (tmp) {
+    printf("QUEUE %p\n", tmp);
     print_task((Task*)(tmp->data));
     fflush(stdin);
     tmp = tmp->next;
@@ -57,25 +58,22 @@ Queue* enqueue(Queue* queue, Task* task) {
   }
 
   List* current = queue->head;
-  while (((Task*)(current->data))->priority >= task->priority && current->next)
+  while (current && task->priority <= ((Task*)(current->data))->priority)
     current = current->next;
-  if (current == queue->head) {
-    queue->head->prev = node;
-    current->next = queue->head;
-    current->prev = NULL;
-    queue->head = node;
-  }
-  else if (current != queue->tail) {
-    node->prev = current->prev;
-    node->next = current;
-    current->prev->next = node;
-    current->prev = node;
-  }
-  else {
-    node->prev = current;
-    current->next = node;
+
+  if (!current) {
+    queue->tail->next = node;
+    node->prev = queue->tail;
     queue->tail = node;
   }
+  else {
+    node->prev = current->prev;
+    node->next = current;
+    if (current->prev)  current->prev->next = node;
+    else queue->head = node;
+    current->prev = node;
+  }
+
   return queue;
 }
 
@@ -100,26 +98,25 @@ Task* dequeue(Queue** queue) {
 
 Queue* queuecpy(Queue* src) {
   if (!src) {
-    return src;
+    return NULL;
   }
 
   Queue* dest = queue_init();
   List* tmp = src->head;
   while (tmp) {
-    dest = enqueue(dest, tmp->data);
+    Task* task = create_task(*((Task*)(tmp->data)));
+    dest = enqueue(dest, task);
     tmp = tmp->next;
   }
-
   return dest;
 }
 
 void queue_clear(Queue** queue) {
-  if (!(*queue)) return;
-
-  list_clear(&((*queue)->head));
-  (*queue)->tail = NULL;
-  free(queue);
-
+  if (*queue) {
+    list_clear(&(*queue)->head);
+    (*queue)->tail = NULL;
+    free(*queue);
+  }
   *queue = NULL;
 }
 
