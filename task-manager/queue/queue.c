@@ -32,8 +32,7 @@ int queue_print(Queue* queue) {
   int count = 0;
   List* tmp = queue->head;
   while (tmp) {
-    printf("QUEUE %p\n", tmp);
-    print_task((Task*)(tmp->data));
+    print_task(tmp->data);
     fflush(stdin);
     tmp = tmp->next;
     count++;

@@ -22,12 +22,13 @@ User* create_user(User user) {
 void user_print(User* user) {
   if (!user) puts("User not created!");
   else {
-    printf("%s", user->id);
-    printf("%c", user->gender);
-    printf("%s", user->name);
-    printf("%s", user->username);
-    printf("%s", user->email);
-    printf("%s", user->phone);
+    printf("%s\n", user->id);
+    printf("%c\n", user->gender);
+    printf("%s\n", user->name);
+    printf("%s\n", user->username);
+    printf("%s\n", user->email);
+    printf("%s\n", user->phone);
+    fflush(stdin);
   }
 }
 
@@ -210,4 +211,10 @@ int signup(List** users, int lastId) {
   strcpy(user.id, id);
 
   return add_user(users, user);
+}
+
+void logout(User** user) {
+  if (!(*user)) return;
+  free(*user);
+  *user = NULL;
 }
