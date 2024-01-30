@@ -4,5 +4,5 @@
 #include "../utils/utils.h"
 
 User* login_page(List** users, int lastId);
-
+int dashboard(TaskManager* instance, User* user);
 #endif

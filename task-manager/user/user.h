@@ -25,6 +25,7 @@ User* findByUsername(List* users, char* username);
 void user_print(User* user);
 int add_user(List** users, User user);
 int connect_users(List** users);
+void logout(User** user);
 
 User* login(List* users);
 int signup(List** users, int lastId);

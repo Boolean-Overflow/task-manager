@@ -35,10 +35,11 @@ List* list_remove(List* head, char id[]) {
   if (!head) return NULL;
   List* current = head;
   while (current && strcmp(current->id, id) != 0) current = current->next;
+  if (!current) return head;
   if (current->prev) current->prev->next = current->next;
   if (current->next) {
     current->next->prev = current->prev;
-    if (current->prev) head = current->next;
+    if (!current->prev) head = current->next;
   }
   free(current);
   return head;
