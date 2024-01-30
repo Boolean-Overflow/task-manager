@@ -110,7 +110,7 @@ Task* tm_execute_tasks(TaskManager** instance) {
   Task* task = dequeue(&((*instance)->tasks));
   if (!task) return NULL;
 
-  if (datecmp(getToday(), task->expiresAt)) task->state = TASK_STATUS_EXPIRED;
+  if (!datecmp(getToday(), task->expiresAt)) task->state = TASK_STATUS_EXPIRED;
   else task->state = TASK_STATUS_DONE;
 
   (*instance)->concludedTasks = stack_push((*instance)->concludedTasks, task);

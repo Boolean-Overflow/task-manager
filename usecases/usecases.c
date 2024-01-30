@@ -106,72 +106,7 @@ void findTaskUC(TaskManager** instance) {
 }
 
 
-int updateUserUC(TaskManager** instance) {
-  int opt, valid = 1;
-  User* user = (*instance)->loggedUser;
-profile_options:
-  do {
-    clearConsole();
-    if (!valid) puts("Valor inválido");
-    puts("Informe qual campo deseja editar");
-    puts("1. Nome");
-    puts("2. Email");
-    puts("3. Telemovel");
-    puts("4. Senha de Utilizador");
-    puts("5. Voltar");
-    printf("[1-5]: ");
-    valid = isValid(&opt, 1, 5);
-  } while (!valid);
-
-  switch (opt) {
-  case 1:
-    printf("Informe o novo nome: ");
-    scanf("%29[^\n]", user->name);
-    break;
-  case 2:
-    printf("Informe o novo nome: ");
-    scanf("%29[^\n]", user->email);
-    break;
-  case 3:
-    printf("Informe o novo nome: ");
-    scanf("%29[^\n]", user->phone);
-    break;
-  case 4:
-  {
-    int attempts = 3;
-    char password[PASSWORD_MAX_SIZE];
-    do {
-      if (attempts < 3) printf("Senha Inválida.\nRestam lhe %d tentativas", attempts);
-      printf("Informe a senha atual: ");
-      fflush(stdin);
-      scanf("%29[^\n]", password);
-    } while (strcmp(password, user->password) || attempts > 0);
-
-    if (!attempts) return 0;
-
-    char newPassword[PASSWORD_MAX_SIZE];
-    valid = 1;
-    do {
-      if (!valid) puts("As senhas não coincidem");
-      printf("Informe a nova senha: ");
-      fflush(stdin);
-      scanf("%s", password);
-      printf("Confirme a nova senha: ");
-      fflush(stdin);
-      scanf("%s", newPassword);
-    } while ((valid = strcmp(password, newPassword)));
-    strcpy(user->password, newPassword);
-  }
-  break;
-  case 5:
-    return 1;
-  }
-  puts("Campo Atualizado com sucesso!");
-  fflush(stdin);
-  pause("");
-  goto profile_options;
-}
-
+//Lista os usuários
 void listUsersUC(TaskManager** instance) {
   List* users = (*instance)->users;
   while (users) {
@@ -180,6 +115,7 @@ void listUsersUC(TaskManager** instance) {
   }
 }
 
+//Verifica se os dados de uma data são válidos (dia, mês e ano)
 int isDateValid(int day, int month, int year) {
   if (year % 4 && (month == 2) && day > 28) return 0;
   if (!(year % 4) && (month == 2) && day > 29) return 0;
@@ -187,6 +123,7 @@ int isDateValid(int day, int month, int year) {
   return 1;
 }
 
+//Adicionar Tarefa
 Task* addTaskUC(TaskManager** instance) {
   Task task;
   int option = 0, valid = 1;

@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include "stack.h"
 
+//Inicializa a Pilha
 Stack* stack_init() {
   Stack* stack = malloc(sizeof(Stack));
   if (!stack) {
@@ -21,6 +22,7 @@ int stack_empty(Stack* stack) {
   return stack->top == NULL;
 }
 
+//Insere um nó no topo da pilha
 Stack* stack_push(Stack* stack, Task* task) {
   List* node = list_create_node(task, task->id);
   node->next = stack->top;
@@ -29,6 +31,7 @@ Stack* stack_push(Stack* stack, Task* task) {
   return stack;
 }
 
+//Verifica se a pilha está vazia
 int is_stack_empty(Stack* stack) {
   if (!stack) {
     puts("Pilha Inexistente!");
@@ -38,6 +41,7 @@ int is_stack_empty(Stack* stack) {
   return stack->top == NULL;
 }
 
+//Mostra os nós da pilha
 int stack_print(Stack* stack) {
   if (!stack) {
     puts("Pilha Inexistente");
@@ -57,6 +61,7 @@ int stack_print(Stack* stack) {
   return total;
 }
 
+//Faz remoção do nó que está no topo da pilha
 Task* stack_pop(Stack** stack) {
   if (!(*stack)) {
     puts("Pilha Inexistente\n");
@@ -77,6 +82,7 @@ Task* stack_pop(Stack** stack) {
   return task;
 }
 
+//Retorna uma cópia do nó que está no topo da pilha
 Task* stack_peek(Stack* stack) {
   if (!stack || !stack->top) {
     puts("Pilha Vazia");
@@ -85,6 +91,7 @@ Task* stack_peek(Stack* stack) {
   return stack->top->data;
 }
 
+//Faz a desalocação de todos os nós da pilha
 void stack_clear(Stack** stack) {
   while (is_stack_empty(*stack)) {
     List* tmp = (*stack)->top;
