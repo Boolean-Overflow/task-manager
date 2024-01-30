@@ -11,7 +11,5 @@ int main() {
   if (!user) return 0;
   //instance = Add_Task(instance); 
   //Task* task = Edit_Task(task, instance->users);
-  Task* task;
-  int a = Task_Expired(task);
   return 0;
 }
