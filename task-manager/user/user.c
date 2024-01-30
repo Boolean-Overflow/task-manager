@@ -28,8 +28,8 @@ void user_print(User* user) {
     printf("%s\n", user->username);
     printf("%s\n", user->email);
     printf("%s\n", user->phone);
-    fflush(stdin);
   }
+  fflush(stdin);
 }
 
 User* findByUsername(List* users, char* username) {

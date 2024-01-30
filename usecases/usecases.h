@@ -3,8 +3,11 @@
 #include "../task-manager/tm.h"
 #include "../utils/utils.h"
 
-// User* login_page(List** users, int lastId);
-// int dashboard(TaskManager* instance, User* user);
-int login_page(TaskManager** instance);
+int loginUC(TaskManager** instance);
+void removeTaskUC(TaskManager** instance);
+void findTaskUC(TaskManager** instance);
+void printTasksUC(TaskManager** instance);
+int updateUserUC(TaskManager** instance);
+void listUsersUC(TaskManager** instance);
 
 #endif

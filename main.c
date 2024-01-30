@@ -24,7 +24,6 @@ void seed(TaskManager** instance) {
 int main() {
   setlocale(0, "Portuguese");
   TaskManager* instance = tm_init();
-  User* user = instance->user;
   int option, valid = 1;
 
   seed(&instance);
@@ -32,8 +31,7 @@ int main() {
   if (!connect_users(&instance->users)) puts("Erro de conexão com o banco!");
 
 login:
-
-  switch (login_page(&instance)) {
+  switch (loginUC(&instance)) {
   case 1:
     goto dashboard_home;
   case 2:
@@ -43,8 +41,8 @@ login:
   }
 
 dashboard_home:
-  clearConsole();
   do {
+    clearConsole();
     puts("===========TASKER - DASHBOARD=============");
     if (!valid) puts("Opção Inválida");
     puts("1- Gerenciar Tarefas");
@@ -56,7 +54,6 @@ dashboard_home:
     valid = isValid(&option, 1, 5);
   } while (!valid);
 
-  puts("TASKER - DASHBOARD");
   switch (option) {
   case 1:
     goto dashboard_task;
@@ -68,9 +65,9 @@ dashboard_home:
     goto dashboard_admin;
     break;
   case 4:
-    return 1;
+    goto login;
   case 5:
-    return 0;
+    goto end;
   }
 
 dashboard_task:
@@ -97,76 +94,18 @@ dashboard_task:
 
   switch (option) {
   case 3:
-  {
-    char str[255];
-    char ids[50][ID_MAX_SIZE];
-    int valid = 1, index = 0, count = 0;
-    printf("Informe o nome da task: ");
-    fflush(stdin);
-    scanf("%254[^\n]", str);
-    puts(str);
-    fflush(stdin);
-
-    List* head = find_matched_tasks(instance->tasks->head, str);
-    if (head->next) {
-      puts("\nForam encontradas as seguintes tarefas:");
-      List* t = head;
-      while (t) {
-        printf("[%d]\n", count + 1);
-        print_task(t->data);
-        strcpy(ids[count], t->id);
-        count++;
-        t = t->next;
-      }
-
-      do {
-        if (!valid) puts("Indice Inválido");
-        printf("Informe o indice da tarefa que deseja eliminar: ");
-        valid = isValid(&index, 1, count);
-        index--;
-      } while (!valid);
-    }
-    else strcpy(ids[index], head->id);
-    list_clear(&head);
-
-    if (strcmp(ids[index], instance->tasks->tail->id) == 0)
-      instance->tasks->tail = instance->tasks->tail->prev;
-
-    instance->tasks->head = list_remove(instance->tasks->head, ids[index]);
-    printf("\nTarefa com id %s removida com sucesso!\n", ids[index]);
-    fflush(stdin);
-  }
-  break;
+    removeTaskUC(&instance);
+    break;
   case 4:
-  {
-    int total = queue_print(instance->tasks);
-    printf("\nTotal %d tarefas\n", total);
-  }
-  break;
+    printTasksUC(&instance);
+    break;
   case 5:
-  {
-    char payload[255];
-    clearConsole();
-    printf("Informe o nome da tarefa: ");
-    fflush(stdin);
-    scanf("%254[^\n]", payload);
-    List* head = find_matched_tasks(instance->tasks->head, payload);
-    if (head) {
-      List* tmp = head;
-      while (tmp) {
-        print_task(tmp->data);
-        tmp = tmp->next;
-      }
-      list_clear(&head);
-      head = tmp = NULL;
-    }
-    else puts("Tarefa Inexistente!");
-    fflush(stdin);
-  }
-  break;
+    findTaskUC(&instance);
+    break;
   }
   pause("");
   goto dashboard_task;
+
 dashboard_profile:
   valid = 1;
   // Perfil
@@ -174,7 +113,7 @@ dashboard_profile:
     clearConsole();
     puts("===========TASKER - PROFILE=============");
     if (!valid) puts("Opção Inválida");
-    printf("Olá, %s\n", user->name);
+    if (instance->user) printf("Olá, %s\n", instance->user->name);
     puts("1- Visualizar informações");
     puts("2- Editar Informações");
     puts("3- Voltar");
@@ -182,81 +121,19 @@ dashboard_profile:
     valid = isValid(&option, 1, 3);
   } while (!valid);
   if (option == 3) goto dashboard_home;
-  valid = 1;
+
   switch (option) {
   case 1:
-    user_print(user);
+    user_print(instance->user);
     break;
   case 2:
-  {
-    int opt;
-  profile_options:
-    do {
-      clearConsole();
-      if (!valid) puts("Valor inválido");
-      puts("Informe qual campo deseja editar");
-      puts("1. Nome");
-      puts("2. Email");
-      puts("3. Telemovel");
-      puts("4. Senha de Utilizador");
-      puts("5. Voltar");
-      printf("[1-5]: ");
-      valid = isValid(&opt, 1, 5);
-    } while (!valid);
-
-    switch (opt) {
-    case 1:
-      printf("Informe o novo nome: ");
-      scanf("%29[^\n]", user->name);
-      break;
-    case 2:
-      printf("Informe o novo nome: ");
-      scanf("%29[^\n]", user->email);
-      break;
-    case 3:
-      printf("Informe o novo nome: ");
-      scanf("%29[^\n]", user->phone);
-      break;
-    case 4:
-    {
-      int attempts = 3;
-      char password[PASSWORD_MAX_SIZE];
-      do {
-        if (attempts < 3) printf("Senha Inválida.\nRestam lhe %d tentativas", attempts);
-        printf("Informe a senha atual: ");
-        fflush(stdin);
-        scanf("%29[^\n]", password);
-      } while (strcmp(password, user->password) || attempts > 0);
-
-      if (!attempts)
-        return 1;
-      char newPassword[PASSWORD_MAX_SIZE];
-      valid = 1;
-      do {
-        if (!valid) puts("As senhas não coincidem");
-        printf("Informe a nova senha: ");
-        fflush(stdin);
-        scanf("%s", password);
-        printf("Confirme a nova senha: ");
-        fflush(stdin);
-        scanf("%s", newPassword);
-      } while ((valid = strcmp(password, newPassword)));
-      strcpy(user->password, newPassword);
-    }
+    if (!updateUserUC(&instance)) goto login;
     break;
-    case 5:
-      goto dashboard_profile;
-      break;
-    }
-    puts("Campo Atualizado com sucesso!");
-    fflush(stdin);
-    pause("");
-    goto profile_options;
   }
-  break;
-  }
+
   pause("");
   goto dashboard_profile;
+
 dashboard_admin:
   // Gerenciar utilizadores
   do {
@@ -272,15 +149,10 @@ dashboard_admin:
 
   switch (option) {
   case 1:
-  {
-    List* users = instance->users;
-    while (users) {
-      user_print(users->data);
-      users = users->next;
-    }
-  }
-  break;
+    listUsersUC(&instance);
+    break;
   case 2:
+    puts("Remove");
     break;
   case 3:
     goto dashboard_home;
