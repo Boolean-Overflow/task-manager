@@ -41,7 +41,6 @@ User* findByUsername(List* users, char* username) {
 }
 
 
-
 int add_user(List** users, User user) {
   User* createdUser = create_user(user);
   if (!createdUser) {

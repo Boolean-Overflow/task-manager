@@ -10,6 +10,7 @@ TaskManager* tm_init() {
     exit(1);
   }
 
+  instance->user = NULL;
   instance->users = NULL;
   // instance->teams = NULL;
   instance->tasks = queue_init();

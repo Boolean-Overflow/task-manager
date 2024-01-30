@@ -11,11 +11,12 @@
 #define TEAM_LAST_ID_INDEX 2
 
 typedef struct TaskManager {
+  User* user;
   List* users;
+  int lastId[3];
   // List* teams;
   Queue* tasks;
   Stack* undo, * redo;
-  int lastId[3];
 } TaskManager;
 
 
