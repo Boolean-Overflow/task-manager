@@ -50,7 +50,6 @@ List* find_matched_tasks(List* tasks, char* str) {
     Task* task = tasks->data;
     if (strstr(task->name, str) || strstr(task->description, str)) {
       head = list_insert(head, taskcpy(task), task->id);
-      puts(task->id);
     }
     tasks = tasks->next;
   }
