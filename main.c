@@ -13,12 +13,12 @@ void seed(TaskManager** instance) {
   Task t5 = { "", "Tratar da Loiça5", "Lavar os pratos do jantar", __TIMESTAMP__, __TIMESTAMP__, 0, 0, NULL };
   Task t6 = { "", "Tratar da Loiça6", "Lavar os pratos do jantar", __TIMESTAMP__, __TIMESTAMP__, 7, 0, NULL };
 
-  tm_add_task(*instance, t1);
-  tm_add_task(*instance, t2);
-  tm_add_task(*instance, t3);
-  tm_add_task(*instance, t4);
-  tm_add_task(*instance, t5);
-  tm_add_task(*instance, t6);
+  tm_add_task(instance, t1);
+  tm_add_task(instance, t2);
+  tm_add_task(instance, t3);
+  tm_add_task(instance, t4);
+  tm_add_task(instance, t5);
+  tm_add_task(instance, t6);
 }
 
 int main() {
@@ -51,6 +51,7 @@ dashboard_home:
     puts("4- Logout");
     puts("5- Sair");
     printf("[1-5]: ");
+
     valid = isValid(&option, 1, 5);
   } while (!valid);
 
@@ -79,9 +80,9 @@ dashboard_task:
     if (!valid) puts("Opção Inválida");
     puts("1- Adicionar Tarefa");
     puts("2- Editar Tarefa");
-    puts("3- Eliminar tarefa"); // KM
-    puts("4- Listar Tarefas"); // KM
-    puts("5- Procurar Tarefa"); // KM
+    puts("3- Eliminar tarefa");
+    puts("4- Listar Tarefas");
+    puts("5- Procurar Tarefa");
     puts("6- Duplicar Tarefa");
     puts("7- Marcar tarefa como concluida");
     // puts("8- Desfazer ultima acção(undo)");
@@ -97,7 +98,7 @@ dashboard_task:
     removeTaskUC(&instance);
     break;
   case 4:
-    printTasksUC(&instance);
+    tm_print(instance, TM_PRINT_TASKS);
     break;
   case 5:
     findTaskUC(&instance);
@@ -113,7 +114,7 @@ dashboard_profile:
     clearConsole();
     puts("===========TASKER - PROFILE=============");
     if (!valid) puts("Opção Inválida");
-    if (instance->user) printf("Olá, %s\n", instance->user->name);
+    if (instance->loggedUser) printf("Olá, %s\n", instance->loggedUser->name);
     puts("1- Visualizar informações");
     puts("2- Editar Informações");
     puts("3- Voltar");
@@ -124,7 +125,7 @@ dashboard_profile:
 
   switch (option) {
   case 1:
-    user_print(instance->user);
+    user_print(instance->loggedUser);
     break;
   case 2:
     if (!updateUserUC(&instance)) goto login;
@@ -149,7 +150,7 @@ dashboard_admin:
 
   switch (option) {
   case 1:
-    listUsersUC(&instance);
+    tm_print(instance, TM_PRINT_USERS);
     break;
   case 2:
     puts("Remove");

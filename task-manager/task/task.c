@@ -46,6 +46,7 @@ void print_task(Task* task) {
 List* find_matched_tasks(List* tasks, char* str) {
   if (!tasks) return NULL;
   List* head = list_init();
+  
   while (tasks) {
     Task* task = tasks->data;
     if (strstr(task->name, str) || strstr(task->description, str)) {

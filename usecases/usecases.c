@@ -18,10 +18,10 @@ int loginUC(TaskManager** instance) {
 
   switch (option) {
   case 1:
-    if (((*instance)->user = login((*instance)->users))) {
+    if (((*instance)->loggedUser = login((*instance)->users))) {
       printf("Seja bem vindo Sr");
-      if ((*instance)->user->gender == 'F') printf("a");
-      printf(". %s\n", (*instance)->user->name);
+      if ((*instance)->loggedUser->gender == 'F') printf("a");
+      printf(". %s\n", (*instance)->loggedUser->name);
       return 1;
     }
     else {
@@ -104,14 +104,9 @@ void findTaskUC(TaskManager** instance) {
   fflush(stdin);
 }
 
-void printTasksUC(TaskManager** instance) {
-  int total = queue_print((*instance)->tasks);
-  printf("\nTotal %d tarefas\n", total);
-}
-
 int updateUserUC(TaskManager** instance) {
   int opt, valid = 1;
-  User* user = (*instance)->user;
+  User* user = (*instance)->loggedUser;
 profile_options:
   do {
     clearConsole();
@@ -150,8 +145,8 @@ profile_options:
       scanf("%29[^\n]", password);
     } while (strcmp(password, user->password) || attempts > 0);
 
-    if (!attempts)
-      return 0;
+    if (!attempts) return 0;
+
     char newPassword[PASSWORD_MAX_SIZE];
     valid = 1;
     do {

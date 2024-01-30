@@ -23,9 +23,10 @@ typedef struct User {
 User* create_user(User user);
 User* findByUsername(List* users, char* username);
 void user_print(User* user);
-int add_user(List** users, User user);
+User* add_user(List** users, User user);
 int connect_users(List** users);
-void logout(User** user);
+User* usercpy(User* src);
+List* find_matched_users(List* users, char* str);
 
 User* login(List* users);
 int signup(List** users, int lastId);

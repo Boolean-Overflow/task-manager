@@ -40,12 +40,17 @@ User* findByUsername(List* users, char* username) {
   return users ? users->data : NULL;
 }
 
+User* usercpy(User* src) {
+  if (!src) return NULL;
 
-int add_user(List** users, User user) {
+  return create_user(*src);
+}
+
+User* add_user(List** users, User user) {
   User* createdUser = create_user(user);
   if (!createdUser) {
     puts("Erro na criação do utilizador");
-    return 0;
+    return NULL;
   }
 
   *users = list_insert(*users, createdUser, createdUser->id);
@@ -69,7 +74,7 @@ int add_user(List** users, User user) {
 
   fclose(file);
 
-  return 1;
+  return createdUser;
 }
 
 int connect_users(List** users) {
@@ -209,11 +214,19 @@ int signup(List** users, int lastId) {
   snprintf(id, 10, "USER-0%d", lastId);
   strcpy(user.id, id);
 
-  return add_user(users, user);
+  return add_user(users, user) != NULL;
 }
 
-void logout(User** user) {
-  if (!(*user)) return;
-  free(*user);
-  *user = NULL;
+List* find_matched_users(List* users, char* str) {
+  if (!users) return NULL;
+  List* head = list_init();
+  while (users) {
+    User* user = users->data;
+    if (strstr(user->username, str)) {
+      head = list_insert(head, usercpy(user), user->id);
+    }
+    users = users->next;
+  }
+
+  return head;
 }
