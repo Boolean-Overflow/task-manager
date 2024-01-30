@@ -18,6 +18,7 @@ typedef struct User {
   char name[NAME_MAX_SIZE], username[USERNAME_MAX_SIZE], password[PASSWORD_MAX_SIZE];
   char email[EMAIL_MAX_SIZE], phone[PHONE_MAX_SIZE];
   char gender;
+  int isAdmin;
 } User;
 
 User* create_user(User user);

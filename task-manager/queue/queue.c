@@ -3,6 +3,7 @@
 #include<string.h>
 #include "queue.h"
 
+//Inicializa a Fila
 Queue* queue_init() {
   Queue* queue = (Queue*)malloc(sizeof(Queue));
   if (!queue) {
@@ -14,10 +15,12 @@ Queue* queue_init() {
   return queue;
 }
 
+//Verifica se a Fila está vazia
 int is_queue_empty(Queue* queue) {
   return queue->head == NULL;
 }
 
+//Mostra os elementos da Fila
 int queue_print(Queue* queue) {
   if (!queue) {
     puts("Fila nao criada");
@@ -41,6 +44,7 @@ int queue_print(Queue* queue) {
   return count;
 }
 
+//Insere um nó na Fila
 Queue* enqueue(Queue* queue, Task* task) {
   if (!queue) {
     printf("Fila nao criada\n");
@@ -76,6 +80,8 @@ Queue* enqueue(Queue* queue, Task* task) {
   return queue;
 }
 
+//Retira um nó da Fila
+
 Task* dequeue(Queue** queue) {
   if (is_queue_empty(*queue)) {
     puts("Fila Vazia");
@@ -94,7 +100,8 @@ Task* dequeue(Queue** queue) {
 
   return task;
 }
-
+ 
+ //Cópia a fila
 Queue* queuecpy(Queue* src) {
   if (!src) {
     return NULL;
@@ -110,6 +117,7 @@ Queue* queuecpy(Queue* src) {
   return dest;
 }
 
+//Limpa a fila
 void queue_clear(Queue** queue) {
   if (*queue) {
     list_clear(&(*queue)->head);
@@ -119,6 +127,7 @@ void queue_clear(Queue** queue) {
   *queue = NULL;
 }
 
+//Compara se duas filas são iguais
 int queuecmp(Queue* queue1, Queue* queue2) {
   List* t1 = queue1->head, * t2 = queue2->head;
   while (t1 && t2) {

@@ -53,6 +53,7 @@ User* add_user(List** users, User user) {
     return NULL;
   }
 
+  createdUser->isAdmin = *users ? 0 : 1;
   *users = list_insert(*users, createdUser, createdUser->id);
 
   FILE* file = fopen(USERS_FILE_PATH, "a");

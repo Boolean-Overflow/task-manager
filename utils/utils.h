@@ -13,5 +13,6 @@ Date getToday();
 Date setDate(int dat, int month, int year);
 void dateToString(char* dest, Date date);
 void stringToDate(char* src, Date* date);
+int datecmp(Date date1, Date date2);
 
 #endif

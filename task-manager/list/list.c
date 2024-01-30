@@ -6,7 +6,7 @@
 List* list_init() {
   return NULL;
 }
-
+// Cria um nó na lista
 List* list_create_node(void* data, char id[]) {
   List* node = malloc(sizeof(List));
   if (!node) {
@@ -21,6 +21,8 @@ List* list_create_node(void* data, char id[]) {
   return node;
 }
 
+// Insere um nó na lista
+
 List* list_insert(List* head, void* data, char id[]) {
   List* node = list_create_node(data, id);
   if (!head) return node;
@@ -30,7 +32,14 @@ List* list_insert(List* head, void* data, char id[]) {
   tmp->next = node;
   return head;
 }
-
+List* list_push_front(List* head, void* data, char id[]) {
+  List* node = list_create_node(data, id);
+  if (!head) return node;
+  head->prev = node;
+  node->next = head;
+  return node;
+}
+//  Remove um nó na lista
 List* list_remove(List* head, char id[]) {
   if (!head) return NULL;
   List* current = head;
@@ -45,6 +54,7 @@ List* list_remove(List* head, char id[]) {
   return head;
 }
 
+//Limpa a lista
 void list_clear(List** head) {
   if (*head) {
     while (*head) {
