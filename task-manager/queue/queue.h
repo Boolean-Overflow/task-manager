@@ -10,15 +10,18 @@ typedef struct TaskList {
 } TaskList;
 
 typedef struct Queue {
-  TaskList* front, * end;
+  List* head, * tail;
   struct Queue* next;
-}Queue;
+} Queue;
 
-// // Matateu
-//Queue* queue_init();
-// void queue_print(Queue* queue);
-// Queue* queue_copy(Queue* queue);
-// Queue* enqueue(Queue* queue, TaskList task);
-// Task dequeue(Queue** queue);
+Queue* queue_init();
+int is_queue_empty(Queue* queue);
+int queue_print(Queue* queue);
+Queue* queuecpy(Queue* src);
+Queue* enqueue(Queue* queue, Task* task);
+Task* dequeue(Queue** queue);
+void queue_clear(Queue** queue);
+int queuecmp(Queue* queue1, Queue* queue2);
+
 
 #endif

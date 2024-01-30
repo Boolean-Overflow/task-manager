@@ -13,15 +13,16 @@
 typedef struct TaskManager {
   List* users;
   // List* teams;
-  // Queue* tasks;
-  // Stack* undo, * redo;
+  Queue* tasks;
+  Stack* undo, * redo;
   int lastId[3];
 } TaskManager;
 
 
 TaskManager* tm_init();
-// TM* tm_insert(TM* tm, Task task);
-// TM* tm_remove(TM* tm, char* id);
-
+TaskManager* tm_add_task(TaskManager* instance, Task task);
+TaskManager* tm_undo(TaskManager* instance);
+TaskManager* tm_redo(TaskManager* instance);
+TaskManager* Add_Task(TaskManager* instance);
 
 #endif

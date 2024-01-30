@@ -7,99 +7,123 @@
 
 Queue* queue_init() {
   Queue* queue = (Queue*)malloc(sizeof(Queue));
-
-  if (!queue) {
-    perror("Erro de alocacao de memória");
-    exit(1);
-  }
-  queue->front = NULL;
-  queue->end = NULL;
+  queue->head = NULL;
+  queue->tail = NULL;
   return queue;
 }
 
-int IsEmptyQueue(Queue* queue) {
-  if (!queue->front)
-    printf("Fila vazia\n");
-  return queue->front == NULL;
+int is_queue_empty(Queue* queue) {
+  return queue->head == NULL;
 }
 
-void queue_print(Queue* queue) {
+int queue_print(Queue* queue) {
   if (!queue) {
-    printf("Fila nao criada\n");
-    exit(1);
+    puts("Fila nao criada");
+    return -1;
   }
-  if (!IsEmptyQueue(queue)) {
-    TaskList* aux = queue->front;
-    printf("<=============================FILA==================================>:\n");
-    while (aux) {
-      print_task(&(aux->task));
-      aux = aux->next;
-    }
-    printf("\n====================================================================\n");
+
+  if (is_queue_empty(queue)) {
+    puts("Fila vazia!");
+    return 0;
   }
-  exit(1);
+
+  int count = 0;
+  List* tmp = queue->head;
+  while (tmp) {
+    printf("QUEUE %p\n", tmp);
+    print_task((Task*)(tmp->data));
+    fflush(stdin);
+    tmp = tmp->next;
+    count++;
+  }
+
+  return count;
 }
-Queue* enqueue(Queue* queue, Task t){
+
+Queue* enqueue(Queue* queue, Task* task) {
   if (!queue) {
     printf("Fila nao criada\n");
     return NULL;
   }
-  TaskList* node = malloc(sizeof(TaskList));
-  node->task = create_task(t);
-  if (IsEmptyQueue(queue)) {
-    queue->front = node;
-    queue->end = node;
+
+  List* node = list_create_node(task, task->id);
+
+  if (!queue->head) {
+    queue->head = node;
+    queue->tail = node;
+
     return queue;
   }
-  TaskList* current = queue->front;
-  while (current->task.priority >= node->task.priority && current->next)
+
+  List* current = queue->head;
+  while (current && task->priority <= ((Task*)(current->data))->priority)
     current = current->next;
-  if (current == queue->front) {
-    queue->front->prev = node;
-    node->next = queue->front;
-    node->prev = NULL;
-    queue->front = node;
+
+  if (!current) {
+    queue->tail->next = node;
+    node->prev = queue->tail;
+    queue->tail = node;
   }
-   else if (current != queue->end) {
+  else {
     node->prev = current->prev;
     node->next = current;
-    current->prev->next = node;
+    if (current->prev)  current->prev->next = node;
+    else queue->head = node;
     current->prev = node;
-   }
-   else {
-   node->prev = current;
-   current->next = node;
-   queue->end = node;
-}
-return queue;
-}
+  }
 
-Queue* queue_copy(Queue* queue) {
-  if (!queue) {
-    printf("Fila nao criada\n");
-    return NULL;
-  }
-  TaskList* aux = queue->front;
-  Queue* copy = malloc(sizeof(Queue));
-  if(!copy){
-    perror("Memoria nao alocada");
-    return NULL;
-  }
-  while (1) {
-    copy = enqueue(copy, aux->task);
-    aux = aux->next;
-  }
-  
   return queue;
 }
 
-Task dequeue(Queue** queue) {
-  if (IsEmptyQueue(*queue)) exit(1);
-  TaskList* temp = (*queue)->front;
-  Task task = temp->task;
-  (*queue)->front = temp->next;
-  if (!(*queue)->front)
-    (*queue)->end = NULL;
+Task* dequeue(Queue** queue) {
+  if (is_queue_empty(*queue)) {
+    puts("Fila Vazia");
+    return NULL;
+  }
+
+  List* temp = (*queue)->head;
+  Task* task = temp->data;
+
+  (*queue)->head = temp->next;
+
+  if (!(*queue)->head)
+    (*queue)->tail = NULL;
+
   free(temp);
+
   return task;
+}
+
+Queue* queuecpy(Queue* src) {
+  if (!src) {
+    return NULL;
+  }
+
+  Queue* dest = queue_init();
+  List* tmp = src->head;
+  while (tmp) {
+    Task* task = create_task(*((Task*)(tmp->data)));
+    dest = enqueue(dest, task);
+    tmp = tmp->next;
+  }
+  return dest;
+}
+
+void queue_clear(Queue** queue) {
+  if (*queue) {
+    list_clear(&(*queue)->head);
+    (*queue)->tail = NULL;
+    free(*queue);
+  }
+  *queue = NULL;
+}
+
+int queuecmp(Queue* queue1, Queue* queue2) {
+  List* t1 = queue1->head, * t2 = queue2->head;
+  while (t1 && t2) {
+    if (strcmp(t1->id, t2->id)) return 0;
+    t1 = t1->next;
+    t2 = t2->next;
+  }
+  return t1 == t2;
 }
