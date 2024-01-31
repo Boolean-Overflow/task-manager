@@ -30,13 +30,11 @@ Task* tm_add_task(TaskManager** instance, Task task) {
     return NULL;
   }
 
-  sprintf(task.id, "TASK-0%d", (*instance)->lastId[TASK_LAST_ID_INDEX]);
+  sprintf(task.id, "TASK-0%d", (*instance)->lastId[TASK_LAST_ID_INDEX]++);
 
   Task* createdTask = create_task(task);
 
   (*instance)->tasks = enqueue((*instance)->tasks, createdTask);
-
-  if (createdTask) (*instance)->lastId[TASK_LAST_ID_INDEX]++;
 
   return createdTask;
 }

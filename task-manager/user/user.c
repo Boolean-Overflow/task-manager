@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
 #include "user.h"
 #include "../../utils/utils.h"
 
@@ -22,12 +23,12 @@ User* create_user(User user) {
 void user_print(User* user) {
   if (!user) puts("User not created!");
   else {
-    printf("%s\n", user->id);
-    printf("%c\n", user->gender);
-    printf("%s\n", user->name);
-    printf("%s\n", user->username);
-    printf("%s\n", user->email);
-    printf("%s\n", user->phone);
+    printf("ID: %s\n", user->id);
+    printf("GENDER: %c\n", user->gender);
+    printf("NAME: %s\n", user->name);
+    printf("USERNAME: %s\n", user->username);
+    printf("EMAIL: %s\n", user->email);
+    printf("PHONE: %s\n", user->phone);
   }
   fflush(stdin);
 }
@@ -53,7 +54,8 @@ User* add_user(List** users, User user) {
     return NULL;
   }
 
-  createdUser->isAdmin = *users ? 0 : 1;
+  createdUser->gender = toupper(createdUser->gender);
+
   *users = list_insert(*users, createdUser, createdUser->id);
 
   FILE* file = fopen(USERS_FILE_PATH, "a");
@@ -63,13 +65,12 @@ User* add_user(List** users, User user) {
   }
 
   fprintf(file, "%s%s", createdUser->id, SEPARATOR);
-  fprintf(file, "%c%s", createdUser->gender, SEPARATOR);
+  fprintf(file, "%s%s", createdUser->password, SEPARATOR);
   fprintf(file, "%s%s", createdUser->name, SEPARATOR);
   fprintf(file, "%s%s", createdUser->username, SEPARATOR);
   fprintf(file, "%s%s", createdUser->email, SEPARATOR);
   fprintf(file, "%s%s", createdUser->phone, SEPARATOR);
-  fprintf(file, "%s%s", createdUser->password, SEPARATOR);
-  fputs("", file);
+  fprintf(file, "%c\n", createdUser->gender);
 
   fflush(file);
 
@@ -84,6 +85,7 @@ int connect_users(List** users) {
     perror("Arquivo Inexistente");
     return 0;
   }
+
   int count = 0;
   char buffer[150];
   while (fgets(buffer, sizeof(buffer), file) != NULL) {
@@ -96,7 +98,7 @@ int connect_users(List** users) {
         strcpy(user.id, token);
         break;
       case 1:
-        user.gender = *token;
+        strcpy(user.password, token);
         break;
       case 2:
         strcpy(user.name, token);
@@ -111,12 +113,11 @@ int connect_users(List** users) {
         strcpy(user.phone, token);
         break;
       case 6:
-        strcpy(user.password, token);
+        user.gender = *token;
         break;
       }
       token = strtok(NULL, ", ");
     }
-
     *users = list_insert(*users, create_user(user), user.id);
     count++;
   }

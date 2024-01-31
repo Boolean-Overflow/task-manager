@@ -44,13 +44,21 @@ List* list_remove(List* head, char id[]) {
   if (!head) return NULL;
   List* current = head;
   while (current && strcmp(current->id, id) != 0) current = current->next;
+  // Se não foi encontrado
   if (!current) return head;
+  // Se é o unico
+  if (current->prev == current->next) head = NULL;
+  // Se Não está no inicio
   if (current->prev) current->prev->next = current->next;
+  // Se não está no fim
   if (current->next) {
     current->next->prev = current->prev;
+    // Se está no inicio
     if (!current->prev) head = current->next;
   }
+  free(current->data);
   free(current);
+
   return head;
 }
 

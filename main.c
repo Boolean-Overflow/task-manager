@@ -5,28 +5,10 @@
 #include "utils/utils.h"
 #include "usecases/usecases.h"
 
-// void seed(TaskManager** instance) {
-//   Task t1 = { "", "Tratar da Loiça1", "Lavar os pratos do jantar", __TIMESTAMP__ , __TIMESTAMP__, 3, 0, NULL };
-//   Task t2 = { "", "Tratar da Loiça2", "Lavar os pratos do jantar", __TIMESTAMP__ , __TIMESTAMP__, 1, 0, NULL };
-//   Task t3 = { "", "Tratar da Loiça2", "Lavar os pratos do jantar", __TIMESTAMP__, __TIMESTAMP__, 7, 0, NULL };
-//   Task t4 = { "", "Tratar da Loiça4", "Lavar os pratos do jantar", __TIMESTAMP__, __TIMESTAMP__, 9, 0, NULL };
-//   Task t5 = { "", "Tratar da Loiça5", "Lavar os pratos do jantar", __TIMESTAMP__, __TIMESTAMP__, 0, 0, NULL };
-//   Task t6 = { "", "Tratar da Loiça6", "Lavar os pratos do jantar", __TIMESTAMP__, __TIMESTAMP__, 7, 0, NULL };
-
-//   tm_add_task(instance, t1);
-//   tm_add_task(instance, t2);
-//   tm_add_task(instance, t3);
-//   tm_add_task(instance, t4);
-//   tm_add_task(instance, t5);
-//   tm_add_task(instance, t6);
-// }
-
 int main() {
   setlocale(0, "Portuguese");
   TaskManager* instance = tm_init();
   int option, valid = 1;
-
-  // seed(&instance);
 
   if (!connect_users(&instance->users)) puts("Erro de conexão com o banco!");
 

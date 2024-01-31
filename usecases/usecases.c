@@ -33,7 +33,7 @@ int loginUC(TaskManager** instance) {
     break;
   case 2:
   {
-    int success = signup(&(*instance)->users, (*instance)->lastId[USER_LAST_ID_INDEX]);
+    int success = signup(&(*instance)->users, (*instance)->lastId[USER_LAST_ID_INDEX]++);
     if (success) puts("Usuario criado com sucesso!");
     else perror("Erro na criação do user");
     pause("");
@@ -55,32 +55,41 @@ void removeTaskUC(TaskManager** instance) {
   scanf("%254[^\n]", str);
 
   List* head = tm_find_matched_tasks(*instance, str);
-  if (head && head->next) {
-    puts("\nForam encontradas as seguintes tarefas:");
-    List* t = head;
-    while (t) {
-      printf("[%d]\n", count + 1);
-      print_task(t->data);
-      strcpy(ids[count], t->id);
-      count++;
-      t = t->next;
+
+  if (head) {
+    if (head->next) {
+      puts("\nForam encontradas as seguintes tarefas:");
+      List* t = head;
+      while (t) {
+        printf("[%d]\n", count + 1);
+        print_task(t->data);
+        strcpy(ids[count], t->id);
+        count++;
+        t = t->next;
+      }
+
+      do {
+        if (!valid) puts("Indice Inválido");
+        printf("Informe o indice da tarefa que deseja eliminar: ");
+        valid = isValid(&index, 1, count);
+        index--;
+      } while (!valid);
+    }
+    else strcpy(ids[index], head->id);
+    list_clear(&head);
+
+    if ((*instance)->tasks->head) {
+      if (strcmp(ids[index], (*instance)->tasks->tail->id) == 0)
+        (*instance)->tasks->tail = (*instance)->tasks->tail->prev;
     }
 
-    do {
-      if (!valid) puts("Indice Inválido");
-      printf("Informe o indice da tarefa que deseja eliminar: ");
-      valid = isValid(&index, 1, count);
-      index--;
-    } while (!valid);
+    (*instance)->tasks->head = list_remove((*instance)->tasks->head, ids[index]);
+
+    (*instance)->concludedTasks->top = list_remove((*instance)->concludedTasks->top, ids[index]);
+
+    printf("\nTarefa com id %s removida com sucesso!\n", ids[index]);
   }
-  else strcpy(ids[index], head->id);
-  list_clear(&head);
-
-  if (strcmp(ids[index], (*instance)->tasks->tail->id) == 0)
-    (*instance)->tasks->tail = (*instance)->tasks->tail->prev;
-
-  (*instance)->tasks->head = list_remove((*instance)->tasks->head, ids[index]);
-  printf("\nTarefa com id %s removida com sucesso!\n", ids[index]);
+  else puts("Tarefa Inexistente");
   fflush(stdin);
 }
 

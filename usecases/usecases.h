@@ -6,7 +6,6 @@
 int loginUC(TaskManager** instance);
 void removeTaskUC(TaskManager** instance);
 void findTaskUC(TaskManager** instance);
-int updateUserUC(TaskManager** instance);
 void listUsersUC(TaskManager** instance);
 Task* addTaskUC(TaskManager** instance);
 
